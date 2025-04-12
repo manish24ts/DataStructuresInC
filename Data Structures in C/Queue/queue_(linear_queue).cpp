@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-#define size 5
+#define size 10
 int queue[size],front=-1,rear=-1,i;
 
 void enqueue();
