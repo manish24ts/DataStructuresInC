@@ -2,7 +2,7 @@
 
 > A comprehensive collection of fundamental Data Structures and Algorithms implemented in **C** as part of academic coursework and programming practice.
 
-![Language](https://img.shields.io/badge/Language-C%20%7-blue)
+![Language](https://img.shields.io/badge/Language-C-blue)
 ![Topic](https://img.shields.io/badge/Topic-Data%20Structures-success)
 ![Algorithms](https://img.shields.io/badge/Algorithms-Searching%20%26%20Sorting-orange)
 ![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
