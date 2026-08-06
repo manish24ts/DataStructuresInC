@@ -1,5 +1,3 @@
-// Double or Doubly linked list
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -7,8 +5,12 @@ struct node {
     struct node *prev;
     int data;
     struct node *next;
-} *head = NULL, *last = NULL, *n, *temp, *p;
+};
 
+struct node *head = NULL, *last = NULL;
+
+// Function declarations
+struct node* createNode(int data);
 void create();
 void display();
 void insertBegin();
@@ -22,9 +24,13 @@ void reverseDisplay();
 
 int main() {
     int ch;
-    printf("1.Create\n2.Display\n3.Insert start\n4.Insert end\n5.Insert After key\n6.Insert Before key\n7.Delete start\n8.Delete end\n9.Delete key\n10.Display in reverse\n11.Exit\n");
+    printf("\n--- Circular Doubly Linked List Menu ---\n");
+    printf("1. Create Node\n2. Display List\n3. Insert at Start\n4. Insert at End\n");
+    printf("5. Insert After Key\n6. Insert Before Key\n7. Delete from Start\n");
+    printf("8. Delete from End\n9. Delete by Key\n10. Display in Reverse\n11. Exit\n");
+
     do {
-        printf("Enter your choice:\n");
+        printf("\nEnter your choice: ");
         scanf("%d", &ch);
         switch (ch) {
             case 1: create(); break;
@@ -37,17 +43,33 @@ int main() {
             case 8: deleteEnd(); break;
             case 9: deleteKey(); break;
             case 10: reverseDisplay(); break;
-            case 11: printf("Exiting the process\n"); exit(0);
-            default: printf("Wrong option\n");
+            case 11: printf("Exiting the program.\n"); break;
+            default: printf("Invalid option. Try again.\n");
         }
-    } while (ch <= 11);
+    } while (ch != 11);
+
+    return 0;
 }
 
+// Create a new node with given data
+struct node* createNode(int data) {
+    struct node *newNode = (struct node *)malloc(sizeof(struct node));
+    if (!newNode) {
+        printf("Memory allocation failed!\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->next = newNode->prev = NULL;
+    return newNode;
+}
+
+// Create node and add to end
 void create() {
-    n = (struct node *)malloc(sizeof(struct node));
-    printf("Enter data value:\n");
-    scanf("%d", &n->data);
-    n->next = n->prev = NULL;
+    int data;
+    printf("Enter data: ");
+    scanf("%d", &data);
+    struct node *n = createNode(data);
+
     if (head == NULL) {
         head = last = n;
         head->next = head->prev = head;
@@ -60,25 +82,45 @@ void create() {
     }
 }
 
+// Display list from head to last
 void display() {
     if (head == NULL) {
-        printf("Empty list\n");
+        printf("List is empty.\n");
         return;
     }
-    temp = head;
-    printf("The linked list is:\n");
+
+    struct node *temp = head;
+    printf("List (forward): ");
     do {
-        printf("%d->", temp->data);
+        printf("%d <-> ", temp->data);
         temp = temp->next;
     } while (temp != head);
-    printf("\n");
+    printf("HEAD\n");
 }
 
+// Display list in reverse order
+void reverseDisplay() {
+    if (head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    struct node *temp = last;
+    printf("List (reverse): ");
+    do {
+        printf("%d <-> ", temp->data);
+        temp = temp->prev;
+    } while (temp != last);
+    printf("LAST\n");
+}
+
+// Insert at beginning
 void insertBegin() {
-    n = (struct node *)malloc(sizeof(struct node));
-    printf("Enter data value:\n");
-    scanf("%d", &n->data);
-    n->next = n->prev = NULL;
+    int data;
+    printf("Enter data: ");
+    scanf("%d", &data);
+    struct node *n = createNode(data);
+
     if (head == NULL) {
         head = last = n;
         head->next = head->prev = head;
@@ -91,11 +133,13 @@ void insertBegin() {
     }
 }
 
+// Insert at end
 void insertEnd() {
-    n = (struct node *)malloc(sizeof(struct node));
-    printf("Enter data value:\n");
-    scanf("%d", &n->data);
-    n->next = n->prev = NULL;
+    int data;
+    printf("Enter data: ");
+    scanf("%d", &data);
+    struct node *n = createNode(data);
+
     if (head == NULL) {
         head = last = n;
         head->next = head->prev = head;
@@ -108,62 +152,78 @@ void insertEnd() {
     }
 }
 
+// Insert after a given key
 void insertAfterKey() {
-    int key;
-    printf("Enter key:\n");
+    int key, data;
+    printf("Enter key to insert after: ");
     scanf("%d", &key);
-    temp = head;
+    struct node *temp = head;
+
+    if (!head) {
+        printf("List is empty.\n");
+        return;
+    }
+
     do {
         if (temp->data == key) {
-            n = (struct node *)malloc(sizeof(struct node));
-            printf("Enter data value:\n");
-            scanf("%d", &n->data);
-            n->next = n->prev = NULL;
+            printf("Enter data to insert: ");
+            scanf("%d", &data);
+            struct node *n = createNode(data);
+
             n->next = temp->next;
             n->prev = temp;
             temp->next->prev = n;
             temp->next = n;
-            if (temp == last) {
-                last = n;
-            }
+            if (temp == last) last = n;
             return;
         }
         temp = temp->next;
     } while (temp != head);
-    printf("Key not found\n");
+
+    printf("Key %d not found.\n", key);
 }
 
+// Insert before a given key
 void insertBeforeKey() {
-    int key;
-    printf("Enter key:\n");
+    int key, data;
+    printf("Enter key to insert before: ");
     scanf("%d", &key);
-    temp = head;
+    struct node *temp = head;
+
+    if (!head) {
+        printf("List is empty.\n");
+        return;
+    }
+
     do {
         if (temp->data == key) {
-            n = (struct node *)malloc(sizeof(struct node));
-            printf("Enter data value:\n");
-            scanf("%d", &n->data);
-            n->next = n->prev = NULL;
+            printf("Enter data to insert: ");
+            scanf("%d", &data);
+            struct node *n = createNode(data);
+
             n->next = temp;
             n->prev = temp->prev;
             temp->prev->next = n;
             temp->prev = n;
-            if (temp == head) {
-                head = n;
-            }
+
+            if (temp == head) head = n;
             return;
         }
         temp = temp->next;
     } while (temp != head);
-    printf("Key not found\n");
+
+    printf("Key %d not found.\n", key);
 }
 
+// Delete from beginning
 void deleteBegin() {
     if (head == NULL) {
-        printf("List is empty\n");
+        printf("List is empty.\n");
         return;
     }
-    temp = head;
+
+    struct node *temp = head;
+
     if (head == last) {
         head = last = NULL;
     } else {
@@ -172,14 +232,18 @@ void deleteBegin() {
         last->next = head;
     }
     free(temp);
+    printf("First node deleted.\n");
 }
 
+// Delete from end
 void deleteEnd() {
     if (head == NULL) {
-        printf("List is empty\n");
+        printf("List is empty.\n");
         return;
     }
-    temp = last;
+
+    struct node *temp = last;
+
     if (head == last) {
         head = last = NULL;
     } else {
@@ -188,17 +252,21 @@ void deleteEnd() {
         head->prev = last;
     }
     free(temp);
+    printf("Last node deleted.\n");
 }
 
+// Delete a specific key
 void deleteKey() {
     int key;
-    if (head == NULL) {
-        printf("List is empty\n");
+    if (!head) {
+        printf("List is empty.\n");
         return;
     }
-    printf("Enter key:\n");
+
+    printf("Enter key to delete: ");
     scanf("%d", &key);
-    temp = head;
+    struct node *temp = head;
+
     do {
         if (temp->data == key) {
             if (temp == head) {
@@ -209,26 +277,12 @@ void deleteKey() {
                 temp->prev->next = temp->next;
                 temp->next->prev = temp->prev;
                 free(temp);
+                printf("Node with key %d deleted.\n", key);
             }
             return;
         }
         temp = temp->next;
     } while (temp != head);
-    printf("Key not found\n");
+
+    printf("Key %d not found.\n", key);
 }
-
-void reverseDisplay() {
-    if (head == NULL) {
-        printf("Empty list\n");
-        return;
-    }
-    temp = last;
-    printf("The linked list in reverse is:\n");
-    do {
-        printf("%d->", temp->data);
-        temp = temp->prev;
-    } while (temp != last);
-    printf("\n");
-}
-
-
